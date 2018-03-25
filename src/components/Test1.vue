@@ -11,6 +11,17 @@
 </template>
 
 <script>
+var cache = {}
+function memorize (index, result) {
+  if (cache[index]) {
+    console.log('Fetching from cache')
+    return cache[index]
+  } else {
+    console.log('Caching result')
+    cache[index] = result
+    return result
+  }
+}
 
 export default {
   name: 'Test1',
@@ -21,7 +32,11 @@ export default {
   },
   methods: {
     getSequencNumber: function () {
-      var sequenceStr = ''
+      var sequenceStr = memorize(this.indexNo)
+      if (sequenceStr != null) {
+        return sequenceStr
+      }
+
       var previousNo = 3
       for (var i = 0; i < this.indexNo; i++) {
         var nextSequenceNo = (previousNo + (2 * i))
@@ -29,6 +44,7 @@ export default {
         sequenceStr += nextSequenceNo + ' '
       }
 
+      memorize(this.indexNo, sequenceStr)
       return sequenceStr
     }
   }
